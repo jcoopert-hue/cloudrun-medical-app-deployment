@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  medical_collab_web:
+    build: .
+    container_name: med_app_web_dev
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASS=dev_password_only
+      - DB_NAME=collab_medical_db
+      - PORT=8080
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: med_app_db_dev
+    environment:
+      - MYSQL_ROOT_PASSWORD=dev_password_only
+      - MYSQL_DATABASE=collab_medical_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
